@@ -22,7 +22,6 @@ const [cart, setCart]= useState([])
             <Guitar
             key={guitar.id}
             guitar={guitar}
-            cart={cart}
             setCart={setCart}
             />
             )}
