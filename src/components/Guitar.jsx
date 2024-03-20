@@ -1,10 +1,10 @@
 
 
-const Guitar = ({guitar,  setCart}) => {
+const Guitar = ({guitar, addToCart}) => {
   const {id, name, image, description, price}=guitar
 
   const handleSubmit=(guitar)=>{
-    setCart(prevCart=>[...prevCart,guitar])
+    addToCart(guitar)
   }
 
   return (
