@@ -14,19 +14,53 @@ const addToCart=(item)=>{
   if(itemExists===-1){
     item.quantity=1
     setCart([...cart, item])
-    console.log("hola");
+
   }else{
     const updatedCart =[...cart]
-    console.log(updatedCart);
     updatedCart[itemExists].quantity++
     setCart(updatedCart)
   }
 }
+
+const removeFromCart=(id)=>{
+  
+  setCart(prevCart=>prevCart.filter(e=>e.id !== id))
+}
+
+const increaseQuantity=(id)=>{
+  const newCart = cart.map(item=>{
+    if(item.id===id){
+      return{
+        ...item,
+        quantity: item.quantity + 1 
+      }
+    }
+    return item
+  })
+  setCart(newCart);
+}
+
+const reduceQuantity=(id)=>{
+  const newCart = cart.map(item=>{
+    if(item.id===id){
+      return{
+        ...item,
+        quantity: item.quantity - 1 
+      }
+    }
+    return item
+  })
+  setCart(newCart);
+}
+
   return (
     <>
       
     <Header
       cart={cart}
+      removeFromCart={removeFromCart}
+      increaseQuantity={increaseQuantity}
+      reduceQuantity={reduceQuantity}
     />
 
     <main className="container-xl mt-5">
