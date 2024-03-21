@@ -1,13 +1,20 @@
 import Header from "./components/Header"
 import Guitar from "./components/Guitar"
 import { db } from "./data/db"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 function App() {
 
-const [data, setData]= useState(db);
-const [cart, setCart]= useState([])
+  const initialCart= ()=>
+    localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')):[]
+  
+
+const [data]= useState(db);
+const [cart, setCart]= useState(initialCart)
+
+const MAX_ITEMS = 5
+const MIN_ITEMS = 1
 
 const addToCart=(item)=>{
   const itemExists = cart.findIndex((guitar)=>guitar.id===item.id)
@@ -15,11 +22,12 @@ const addToCart=(item)=>{
     item.quantity=1
     setCart([...cart, item])
 
-  }else{
+  }else if (cart[itemExists].quantity <MAX_ITEMS) {
     const updatedCart =[...cart]
     updatedCart[itemExists].quantity++
     setCart(updatedCart)
-  }
+}
+  
 }
 
 const removeFromCart=(id)=>{
@@ -29,7 +37,7 @@ const removeFromCart=(id)=>{
 
 const increaseQuantity=(id)=>{
   const newCart = cart.map(item=>{
-    if(item.id===id){
+    if(item.id===id && item.quantity < MAX_ITEMS){
       return{
         ...item,
         quantity: item.quantity + 1 
@@ -42,7 +50,7 @@ const increaseQuantity=(id)=>{
 
 const reduceQuantity=(id)=>{
   const newCart = cart.map(item=>{
-    if(item.id===id){
+    if(item.id===id && item.quantity > MIN_ITEMS){
       return{
         ...item,
         quantity: item.quantity - 1 
@@ -53,6 +61,16 @@ const reduceQuantity=(id)=>{
   setCart(newCart);
 }
 
+
+const emptyCart=()=>{
+  setCart([])
+}
+
+useEffect(() => {
+  localStorage.setItem('cart', JSON.stringify(cart))
+}, [cart])
+
+
   return (
     <>
       
@@ -61,6 +79,7 @@ const reduceQuantity=(id)=>{
       removeFromCart={removeFromCart}
       increaseQuantity={increaseQuantity}
       reduceQuantity={reduceQuantity}
+      emptyCart={emptyCart}
     />
 
     <main className="container-xl mt-5">
@@ -81,7 +100,8 @@ const reduceQuantity=(id)=>{
 
     <footer className="bg-dark mt-5 py-5">
         <div className="container-xl">
-            <p className="text-white text-center fs-4 mt-4 m-md-0">GuitarLA - Todos los derechos Reservados</p>
+            <p className="text-white text-center fs-4 mt-4 m-md-0">
+              GuitarLA - Todos los derechos Reservados</p>
         </div>
     </footer>
 

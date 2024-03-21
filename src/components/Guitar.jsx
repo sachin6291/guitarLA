@@ -1,7 +1,7 @@
 
 
 const Guitar = ({guitar, addToCart}) => {
-  const {id, name, image, description, price}=guitar
+  const { name, image, description, price}=guitar
 
   const handleSubmit=(guitar)=>{
     addToCart(guitar)
